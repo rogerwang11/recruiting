@@ -1,0 +1,232 @@
+{
+  "id": "customer-success-csm",
+  "role": "Customer Success Manager",
+  "level": "Mid-level (3-6 years experience)",
+  "duration_minutes": 45,
+  "format": "Timed, asynchronous, open-book. Candidate may use any reference material.",
+  "premise": "The candidate inherits an at-risk enterprise account and must diagnose it, allocate limited time against it, adapt when new information arrives, and produce the actual communication artifact the job requires.",
+
+  "competencies": [
+    {
+      "id": "diagnostic_rigor",
+      "name": "Diagnostic rigor",
+      "definition": "Separates symptoms from root causes. Finds the constraint that actually binds, including when it is buried in routine-looking detail."
+    },
+    {
+      "id": "prioritization",
+      "name": "Prioritization under constraint",
+      "definition": "Sequences work against real time limits. Buys cheap information before committing to expensive artifacts."
+    },
+    {
+      "id": "adaptability",
+      "name": "Adaptability",
+      "definition": "Updates the plan when new information invalidates the prior one, rather than defending the original answer."
+    },
+    {
+      "id": "commercial_judgment",
+      "name": "Commercial judgment",
+      "definition": "Reads budget and competitive dynamics. Resists the discount reflex. Aligns to the buyer's stated agenda rather than the vendor's."
+    },
+    {
+      "id": "written_communication",
+      "name": "Written communication",
+      "definition": "Concise, specific, leads with the counterparty's interest. Earns the next step instead of pitching."
+    }
+  ],
+
+  "context": {
+    "company": "Meridian",
+    "company_description": "B2B workflow automation software. ~$40M ARR. Sells to mid-market operations teams.",
+    "candidate_role": "You are a Customer Success Manager at Meridian. You carry 23 accounts.",
+    "situation": "You inherited the Northwind Logistics account three weeks ago when the previous CSM left the company. You have not yet spoken to anyone there. Today is Monday."
+  },
+
+  "stages": [
+    {
+      "id": "diagnose",
+      "order": 1,
+      "title": "What is actually going on?",
+      "time_minutes": 12,
+      "brief": "Below is everything in the account record for Northwind Logistics. Read it, then answer the questions.",
+      "materials": {
+        "title": "Northwind Logistics — account record",
+        "facts": [
+          { "label": "Contract value", "value": "$180,000 ARR" },
+          { "label": "Renewal date", "value": "67 days from today" },
+          { "label": "Contract terms", "value": "Auto-renews annually. Either party may decline renewal with 60 days written notice." },
+          { "label": "Product usage", "value": "Down 34% quarter over quarter. The decline is concentrated: 2 of their 5 departments stopped logging in entirely in March. The other 3 are flat." },
+          { "label": "Support tickets", "value": "14 in the last 90 days. 9 of them concern the integration with Northwind's warehouse management system (WMS). Most recent WMS ticket is still open, 41 days old." },
+          { "label": "Executive sponsor", "value": "Dana Reyes (VP Operations) championed the original purchase. Left Northwind 6 weeks ago." },
+          { "label": "New executive", "value": "Marcus Chen replaced Dana as VP Operations. The previous CSM emailed him twice. No response to either." },
+          { "label": "Satisfaction survey", "value": "Last quarterly survey: 3 responses, average 4/10. Year-ago survey: 11 responses, average 8/10." },
+          { "label": "Most engaged user", "value": "Priya Raghavan, Operations Manager. Logs in daily. Has filed 6 of the 14 support tickets. Attended both user webinars this year." },
+          { "label": "Recent inbound", "value": "Northwind procurement sent a form email last Tuesday: 'annual vendor consolidation review — please confirm your account manager contact.'" }
+        ]
+      },
+      "tasks": [
+        {
+          "id": "risks",
+          "type": "ranked_text",
+          "count": 3,
+          "prompt": "Rank the top 3 risks to this account, most severe first. One sentence each."
+        },
+        {
+          "id": "urgent_action",
+          "type": "short_text",
+          "word_limit": 75,
+          "prompt": "What is the single most urgent thing you do in the next 48 hours, and why that rather than anything else?"
+        }
+      ],
+      "facilitator_only": {
+        "what_this_tests": ["diagnostic_rigor"],
+        "buried_signal": "The 60-day non-renewal notice clause against a 67-day renewal date means Northwind's deadline to give notice is 7 days away. The real clock is one week, not 67 days. Nothing in the record says this directly; the candidate has to do the subtraction.",
+        "causal_chain": "The WMS integration broke (9 tickets, one open 41 days) → 2 departments built a manual workaround in March → those departments stopped using Meridian. The usage drop is a symptom, not the disease. Sponsor loss removed the internal advocate who would have escalated the WMS bug.",
+        "distractor": "The usage drop is the loudest signal and the most tempting thing to 'fix' with training or a QBR. Training does not fix a broken integration.",
+        "procurement_read": "A 'routine' consolidation review email arriving 7 days before a notice deadline is not routine.",
+        "rubric": {
+          "1": "Names the usage drop as the problem. Proposes training, a check-in call, or a QBR. Does not mention the notice deadline. Treats signals as a flat list.",
+          "2": "Identifies either the sponsor vacuum or the notice deadline, but not both. Some separation of symptom from cause, inconsistently applied.",
+          "3": "Identifies the 7-day notice deadline as the binding constraint AND the sponsor vacuum as the root cause of the account going dark. Connects the WMS tickets to the two dormant departments. Reads the procurement email as a threat signal.",
+          "4": "All of level 3, plus: states explicitly what they do not yet know and how they would learn it within hours; identifies Priya as the only available route to Marcus; notes that the previous CSM's two unanswered emails mean a third email is unlikely to work."
+        }
+      }
+    },
+
+    {
+      "id": "allocate",
+      "order": 2,
+      "title": "Where does your week go?",
+      "time_minutes": 10,
+      "brief": "You have 6 working hours available for this account this week. You have 22 other accounts. Choose what you do and in what order. You do not have to spend all 6 hours.",
+      "materials": {
+        "title": "Available actions",
+        "options": [
+          { "id": "roi_deck", "label": "Build a usage and ROI deck for Marcus", "cost_hours": 3 },
+          { "id": "call_priya", "label": "Call Priya to get intel and ask for an introduction", "cost_hours": 0.5 },
+          { "id": "escalate_wms", "label": "Escalate the WMS integration bug to engineering with a written business case", "cost_hours": 1 },
+          { "id": "email_marcus", "label": "Email Marcus a third time, different angle", "cost_hours": 0.25 },
+          { "id": "internal_save_plan", "label": "Loop in your AE and your manager to build a save plan", "cost_hours": 1 },
+          { "id": "onsite_qbr", "label": "Fly out for an onsite business review", "cost_hours": 8 },
+          { "id": "usage_audit", "label": "Audit all 5 departments' usage in detail", "cost_hours": 2 },
+          { "id": "discount_proposal", "label": "Draft a renewal proposal with a discount", "cost_hours": 1.5 },
+          { "id": "priya_to_procurement", "label": "Ask Priya to forward a note to procurement", "cost_hours": 0.25 }
+        ]
+      },
+      "tasks": [
+        {
+          "id": "selection",
+          "type": "ordered_selection",
+          "budget_hours": 6,
+          "prompt": "Select your actions and put them in the order you would do them."
+        },
+        {
+          "id": "rationale",
+          "type": "short_text",
+          "word_limit": 100,
+          "prompt": "Why this order? Name one thing you deliberately chose not to do, and why."
+        }
+      ],
+      "facilitator_only": {
+        "what_this_tests": ["prioritization", "commercial_judgment"],
+        "key_behavior": "Cheap information before expensive artifacts. The Priya call costs 0.5h and determines whether the ROI deck is even the right artifact. Building the 3-hour deck first is committing half the budget before knowing anything.",
+        "traps": {
+          "onsite_qbr": "Costs 8 hours against a 6-hour budget. Selecting it means the candidate did not check the math.",
+          "discount_proposal": "Discounting before diagnosing. Also: there is no evidence yet that price is the issue.",
+          "roi_deck_first": "The most common wrong answer. Feels productive, is unfalsifiable work, and burns half the week on a guess.",
+          "email_marcus": "Cheap, so not wrong to include — but as the primary move it repeats what already failed twice."
+        },
+        "strong_pattern": "call_priya → internal_save_plan or escalate_wms → then an artifact chosen based on what Priya said. Leaves budget unspent deliberately, pending new information.",
+        "rubric": {
+          "1": "Exceeds the time budget, or leads with the ROI deck or the discount proposal. No stated sequencing logic. Names nothing they declined to do.",
+          "2": "Stays within budget and includes the Priya call, but places it after a major artifact, or treats the list as parallel work rather than a sequence.",
+          "3": "Leads with cheap information gathering. Escalates internally early. Defers the expensive artifact until after the Priya call. Names a specific thing declined and gives a real reason.",
+          "4": "All of level 3, plus: explicitly holds budget in reserve because the plan is expected to change, and states what they would learn that would cause them to spend it differently."
+        }
+      }
+    },
+
+    {
+      "id": "curveball",
+      "order": 3,
+      "title": "The call with Priya",
+      "time_minutes": 8,
+      "brief": "You reach Priya. She is candid, and she likes Meridian. Here is what she tells you. You have 5.5 hours of your week left.",
+      "materials": {
+        "title": "What Priya says",
+        "facts": [
+          { "label": "Budget mandate", "value": "Marcus has been told to cut operations vendor spend by 20% this fiscal year. It is his first mandate in the job." },
+          { "label": "Competitor", "value": "A competitor, Flowstate, demoed to Marcus two weeks ago and quoted roughly 40% below Meridian's price." },
+          { "label": "Priya's own view", "value": "She thinks Meridian is materially better than Flowstate and says the team would be worse off switching. She has not been asked her opinion and is not in the decision meetings." },
+          { "label": "The dormant departments", "value": "They stopped using Meridian in March when the WMS integration broke. They built a manual spreadsheet workaround. It is now their standard process and they are not asking for the integration back." },
+          { "label": "Marcus's stated priority", "value": "In his first all-hands he said his top goal was to 'reduce tool sprawl.' Northwind currently runs 4 overlapping ops tools including Meridian." }
+        ]
+      },
+      "tasks": [
+        {
+          "id": "reframe",
+          "type": "short_text",
+          "word_limit": 100,
+          "prompt": "Has your read on this account changed? If so, how? If not, say why not."
+        },
+        {
+          "id": "replan",
+          "type": "ordered_selection",
+          "budget_hours": 5.5,
+          "prompt": "Re-plan your remaining 5.5 hours. You may reuse the earlier menu or propose actions that were not on it."
+        }
+      ],
+      "facilitator_only": {
+        "what_this_tests": ["adaptability", "commercial_judgment"],
+        "the_reframe": "This is no longer a usage or satisfaction problem. It is a budget mandate plus an active competitive displacement, with a price gap of 40%. Defending on ROI alone loses to a 40% cheaper quote.",
+        "the_insight": "Marcus's own stated goal — reduce tool sprawl, 4 overlapping tools — is the opening. The winning frame is not 'do not cut Meridian.' It is 'consolidate onto Meridian and cut two of the other three tools,' which delivers his 20% mandate while increasing Meridian's footprint. The candidate who finds this has turned a defensive renewal into an expansion argument using the buyer's own agenda.",
+        "the_dormant_departments": "Now strategically live. Two departments on a manual spreadsheet workaround are either evidence Meridian is not needed (Flowstate's argument) or an unrealized recovery opportunity contingent on the WMS fix. Strong candidates see both readings and pick one deliberately.",
+        "priya_handling": "Priya is the only intelligence source and has no political cover. Using her name in a note to Marcus without asking exposes her. Strong candidates protect the source or explicitly ask her permission.",
+        "rubric": {
+          "1": "Does not materially change the plan. Continues with the ROI deck as originally conceived. Or reacts by immediately proposing a discount to close the 40% gap.",
+          "2": "Recognizes the competitive threat and the budget mandate, but responds by defending Meridian's value on its own terms. Plan changes in emphasis, not in kind.",
+          "3": "Reframes around Marcus's consolidation agenda rather than Meridian's value. Recognizes that the 40% gap cannot be closed on price and must be reframed on scope. Re-plans concretely. Handles Priya's exposure deliberately.",
+          "4": "All of level 3, plus: converts the renewal defense into a consolidation proposal that makes Meridian the surviving tool; identifies the WMS fix as the precondition for winning the two dormant departments back and therefore for the consolidation story being credible; names what would make them walk away or forecast the loss honestly."
+        }
+      }
+    },
+
+    {
+      "id": "artifact",
+      "order": 4,
+      "title": "The email",
+      "time_minutes": 15,
+      "brief": "Write the actual email to Marcus Chen. He has not responded to two previous emails from Meridian. Maximum 200 words.",
+      "tasks": [
+        {
+          "id": "email",
+          "type": "long_text",
+          "word_limit": 200,
+          "prompt": "Subject line and body."
+        }
+      ],
+      "facilitator_only": {
+        "what_this_tests": ["written_communication", "commercial_judgment"],
+        "scoring_notes": [
+          "Opens on Marcus's agenda (cost mandate, tool sprawl), not Meridian's (renewal, usage, relationship).",
+          "Does not mention the renewal date in the first two sentences. The email that leads with 'your renewal is coming up' is a vendor email and gets deleted like the two before it.",
+          "Asks for a specific, small next step — a 20-minute conversation with a stated agenda — rather than pitching the solution in the email.",
+          "Contains at least one concrete, verifiable specific about Northwind. Generic vendor language means the candidate had five pages of detail and used none of it.",
+          "Does not expose Priya as the source.",
+          "Under 200 words. Candidates who run long usually could not decide what mattered."
+        ],
+        "rubric": {
+          "1": "Leads with the renewal or with Meridian's value. Generic. Over the word limit, or asks for a vague 'catch-up.' Or names Priya as the source of the intelligence.",
+          "2": "Reasonable and professional, leads with the customer to some degree, but the ask is soft and the specifics are thin. Reads like a competent template.",
+          "3": "Opens on the cost mandate or sprawl goal. Concrete Northwind specifics. Clear, small, well-framed ask. Within limit. Priya protected.",
+          "4": "All of level 3, and the email makes Marcus curious rather than defensive — it offers him a way to hit his 20% number that he has not considered, without revealing the whole argument, so that taking the meeting is the cheapest way to find out."
+        }
+      }
+    }
+  ],
+
+  "scoring_summary": {
+    "method": "Each competency scored 1-4 against the anchored levels above. Two independent reviewers score blind, then reconcile any gap of 2 or more levels in conversation.",
+    "bar": "Hire bar for mid-level CSM: mean 2.8 or above, with no single competency below 2. A 1 in adaptability or commercial judgment is a hard stop regardless of the mean.",
+    "note": "Do not sum into a single number and rank. The profile matters more than the total — a 4/4/2/4/3 and a 3/3/3/3/3 have the same mean and are very different hires."
+  }
+}

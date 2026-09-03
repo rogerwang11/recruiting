@@ -1,0 +1,232 @@
+{
+  "id": "gtm-lead",
+  "role": "GTM Lead / Head of Go-To-Market",
+  "level": "Senior (7+ years, first or second GTM leadership role)",
+  "duration_minutes": 50,
+  "format": "Timed, asynchronous, open-book. Candidate may use any reference material.",
+  "premise": "The candidate joins a company whose self-serve motion has stopped compounding, and must distinguish which layer of the funnel is actually broken, allocate a fixed budget, absorb a board-level constraint that invalidates the easy plan, and write the memo.",
+
+  "competencies": [
+    {
+      "id": "diagnostic_rigor",
+      "name": "Diagnostic rigor",
+      "definition": "Separates acquisition, activation, conversion, and motion-market fit problems rather than treating 'growth is flat' as one undifferentiated problem."
+    },
+    {
+      "id": "resource_allocation",
+      "name": "Resource allocation",
+      "definition": "Commits a finite budget against a ranked hypothesis, sizes the bets against the return, and does not spread thin."
+    },
+    {
+      "id": "adaptability",
+      "name": "Adaptability",
+      "definition": "Updates the plan when new information invalidates the prior one, rather than defending the original answer."
+    },
+    {
+      "id": "market_insight",
+      "name": "Market insight",
+      "definition": "Finds the segment or use-case wedge in the data. Recognizes when the market is pulling the company somewhere other than where it is spending."
+    },
+    {
+      "id": "written_communication",
+      "name": "Written communication",
+      "definition": "Makes a clear recommendation, states the tradeoff honestly, and is legible to a board in one page."
+    }
+  ],
+
+  "context": {
+    "company": "Cadence",
+    "company_description": "API-based developer tool for workflow orchestration. $8M ARR, 40 employees. Product-led growth motion: developers sign up self-serve, hit a usage threshold, and convert to paid.",
+    "candidate_role": "You are joining as the first GTM lead. Previously the CEO ran GTM directly.",
+    "situation": "Growth has been flat for three quarters. You are two weeks in and have pulled the numbers below. Your first board meeting is in three weeks."
+  },
+
+  "stages": [
+    {
+      "id": "diagnose",
+      "order": 1,
+      "title": "Which layer is broken?",
+      "time_minutes": 15,
+      "brief": "Here is what you have found in your first two weeks. Read it, then answer.",
+      "materials": {
+        "title": "Cadence — the numbers",
+        "facts": [
+          { "label": "Signups", "value": "Flat at ~2,400/month for 3 quarters." },
+          { "label": "Activation", "value": "31% of signups make a first API call within 7 days. Was 38% a year ago." },
+          { "label": "Free to paid conversion", "value": "Declined from 4.1% to 2.6% over the same three quarters." },
+          { "label": "Self-serve ACV", "value": "$4,800." },
+          { "label": "Enterprise deals", "value": "3 closed last year, average $95,000. All inbound. All closed personally by the CEO." },
+          { "label": "Sales team", "value": "2 AEs hired 5 months ago. Neither has closed a deal. Neither came from a PLG company." },
+          { "label": "CAC payback (self-serve)", "value": "14 months. Was 9 months a year ago." },
+          { "label": "Paid acquisition spend", "value": "Up 60% year over year." },
+          { "label": "Net promoter score", "value": "47 overall. Segmented: enterprise users 62, self-serve users 41." },
+          { "label": "Competition", "value": "Nearest competitor raised $60M four months ago and is spending heavily on developer marketing." },
+          { "label": "Product velocity", "value": "Shipping consistently. 14 meaningful releases last year. No decline in engineering output." }
+        ]
+      },
+      "tasks": [
+        {
+          "id": "hypotheses",
+          "type": "ranked_text",
+          "count": 3,
+          "prompt": "Rank your top 3 hypotheses for what is actually wrong, most likely first. One or two sentences each."
+        },
+        {
+          "id": "disconfirm",
+          "type": "short_text",
+          "word_limit": 100,
+          "prompt": "For your top hypothesis: what data would you pull in week 3 that could prove you wrong?"
+        }
+      ],
+      "facilitator_only": {
+        "what_this_tests": ["diagnostic_rigor", "market_insight"],
+        "the_layers": "Signups flat = acquisition saturated. Activation down 38%→31% = the leaky bucket, and it sits upstream of everything else. Conversion down 4.1%→2.6% is partly downstream of activation, so it may not be an independent problem at all. CAC payback 9→14 months with paid spend up 60% = they are buying increasingly marginal users.",
+        "the_signal_in_the_data": "Enterprise: 20x the ACV, meaningfully higher NPS (62 vs 41), and all three deals arrived inbound with no sales motion at all. The market is pulling Cadence upmarket while the company spends 60% more acquiring self-serve users who activate less and pay back slower.",
+        "the_ae_misread": "Two AEs with no closes after 5 months looks like a hiring problem. It is more likely a pipeline and motion problem — they were hired into a company with no enterprise demand-gen, no lead routing, and no enterprise-qualified funnel. Blaming the AEs is the shallow read.",
+        "activation_primacy": "A candidate who proposes fixing conversion without fixing activation is optimizing a stage that is starved upstream. Activation at 31% is the highest-leverage number on the page.",
+        "rubric": {
+          "1": "Treats 'growth is flat' as one problem. Recommends more marketing spend or more AEs. Does not distinguish activation from conversion. No disconfirming data named.",
+          "2": "Separates two or three funnel layers correctly and identifies activation or CAC deterioration as an issue, but misses the enterprise signal entirely, or reads the AE failure as a hiring problem.",
+          "3": "Correctly ranks activation as upstream and highest-leverage. Identifies the enterprise segment signal (ACV, NPS, inbound-only) as evidence of motion-market mismatch. Reads the AE failure as a pipeline problem. Names specific disconfirming data.",
+          "4": "All of level 3, plus: notes that declining conversion may be entirely downstream of declining activation and should not be treated as a separate problem until activation is fixed; recognizes that a competitor with $60M spending on developer marketing makes the self-serve acquisition race structurally unfavorable; the disconfirming test is genuinely capable of falsifying the hypothesis rather than confirming it."
+        }
+      }
+    },
+
+    {
+      "id": "allocate",
+      "order": 2,
+      "title": "Where does the money go?",
+      "time_minutes": 12,
+      "brief": "You have $1.2M in incremental budget and two quarters. Allocate it. You may fund an item partially where that makes sense.",
+      "materials": {
+        "title": "Available investments",
+        "options": [
+          { "id": "more_paid", "label": "Increase paid developer acquisition", "cost": "$400K" },
+          { "id": "activation_eng", "label": "Fund 2 engineers for one quarter on onboarding and time-to-first-API-call", "cost": "$180K" },
+          { "id": "third_ae", "label": "Hire a third AE", "cost": "$160K" },
+          { "id": "enterprise_ae", "label": "Replace one AE with an enterprise AE from a comparable company", "cost": "$110K incremental" },
+          { "id": "sales_engineer", "label": "Hire a sales engineer to support technical enterprise deals", "cost": "$150K" },
+          { "id": "devrel", "label": "Fund developer relations: docs, tutorials, conference presence", "cost": "$220K" },
+          { "id": "demand_gen", "label": "Build enterprise demand generation: content, ABM, lead routing", "cost": "$200K" },
+          { "id": "pricing_project", "label": "Pricing and packaging overhaul with outside help", "cost": "$120K" },
+          { "id": "research", "label": "Win/loss and churn research across the last 18 months", "cost": "$60K" },
+          { "id": "brand", "label": "Brand refresh and new website", "cost": "$250K" }
+        ]
+      },
+      "tasks": [
+        {
+          "id": "allocation",
+          "type": "budget_allocation",
+          "budget": 1200000,
+          "prompt": "Allocate the $1.2M. You do not have to spend all of it."
+        },
+        {
+          "id": "rationale",
+          "type": "short_text",
+          "word_limit": 120,
+          "prompt": "Defend the allocation. What is the single biggest bet, and what has to be true for it to pay off?"
+        }
+      ],
+      "facilitator_only": {
+        "what_this_tests": ["resource_allocation"],
+        "coherence_test": "The allocation should follow from the stage 1 diagnosis. A candidate who diagnosed activation and enterprise pull, then funds paid acquisition and a brand refresh, has not connected their own analysis to their own plan. This inconsistency is the single most informative thing in this stage.",
+        "cheap_information": "Win/loss research at $60K is 5% of the budget and directly tests the enterprise hypothesis. Skipping it while making a large enterprise bet is spending $1.2M on an untested read.",
+        "traps": {
+          "more_paid": "Doubling down on the channel whose payback went 9→14 months against a competitor with $60M to spend.",
+          "brand": "Legible, expensive, and disconnected from every number on the page.",
+          "third_ae": "Adding a third AE when two are failing for pipeline reasons multiplies the existing problem."
+        },
+        "spreading_thin": "Funding 7+ items at partial levels is a common failure. It reads as consensus-seeking and guarantees nothing is resourced enough to work.",
+        "rubric": {
+          "1": "Allocation contradicts the stated diagnosis, or funds paid acquisition and brand as the largest line items. Spreads across most of the menu. No stated conditions for success.",
+          "2": "Allocation is broadly defensible and partially follows the diagnosis, but hedges — three or four medium bets with no clear primary. Rationale describes the choices rather than defending them.",
+          "3": "Allocation follows directly from the diagnosis, with one clear primary bet. Funds activation. Buys the cheap research. States what must be true for the main bet to pay off.",
+          "4": "All of level 3, plus: leaves budget deliberately unspent pending the research result, sequences spend across the two quarters rather than committing it all on day one, and names the specific leading indicator that would tell them by mid-quarter whether the bet is working."
+        }
+      }
+    },
+
+    {
+      "id": "curveball",
+      "order": 3,
+      "title": "Three things change",
+      "time_minutes": 8,
+      "brief": "Before you finalize anything, three things happen in the same week.",
+      "materials": {
+        "title": "What changed",
+        "facts": [
+          { "label": "The board", "value": "The board tells you they expect a credible path to $20M ARR within 18 months. Cadence is at $8M." },
+          { "label": "Attrition", "value": "One of the two AEs resigns." },
+          { "label": "The finding", "value": "Your win/loss review turns up something nobody had noticed: all three enterprise deals came from the same use case — compliance and audit logging. Cadence handles it almost by accident, as a side effect of how the orchestration engine writes its event log. It is not in any marketing material, is not on the roadmap, and no one at Cadence considers it a feature." }
+        ]
+      },
+      "tasks": [
+        {
+          "id": "reframe",
+          "type": "short_text",
+          "word_limit": 120,
+          "prompt": "What changes about your plan, and what does not?"
+        },
+        {
+          "id": "board_math",
+          "type": "short_text",
+          "word_limit": 100,
+          "prompt": "$8M to $20M in 18 months. Show roughly how you would get there, or explain why you would tell the board it is the wrong target."
+        }
+      ],
+      "facilitator_only": {
+        "what_this_tests": ["adaptability", "market_insight", "commercial_judgment"],
+        "the_wedge": "The compliance logging finding is the whole assessment. Three enterprise deals at $95K arriving inbound, unmarketed, for a capability the company does not know it sells, is a market telling a company what it is. The strong candidate reorients around it: name it, package it, market it, sell into it. This is the difference between a candidate who allocates budget and a candidate who finds the business.",
+        "the_math": "Self-serve at $4,800 ACV requires ~2,500 net new paying customers to add $12M — implausible at 2,400 signups/month and 2.6% conversion. Compliance-driven enterprise at $95K requires ~126 deals, still very hard, but a blend is arithmetically reachable in a way pure self-serve is not. A candidate who does no arithmetic here and simply asserts the target is achievable has failed the stage. A candidate who does the arithmetic and pushes back on the target with a defensible counter-proposal has passed it.",
+        "the_ae_resignation": "Actually clarifying rather than damaging — it frees budget and removes the need to manage out a mis-hire. Candidates who treat it as a crisis are reacting to the frame rather than the facts.",
+        "what_should_not_change": "Activation. It is upstream of the self-serve business regardless of what happens upmarket, and the compliance wedge does not fix it. A candidate who abandons activation entirely to chase the wedge has over-rotated — which is its own failure mode, and worth distinguishing from healthy adaptation.",
+        "rubric": {
+          "1": "Accepts the $20M target without arithmetic. Treats the compliance finding as an interesting aside. Reacts to the AE resignation as the main event.",
+          "2": "Recognizes the compliance finding matters and adjusts emphasis toward enterprise, but does not restructure the plan around it. Board math is asserted rather than shown.",
+          "3": "Reorients the plan around the compliance wedge: packaging, positioning, targeted demand gen, enterprise motion. Does real arithmetic on the $20M path. Keeps activation funded. Treats the resignation as budget relief.",
+          "4": "All of level 3, plus: is explicit about what Cadence would be giving up by going upmarket and decides deliberately rather than drifting; either presents a credible blended path with stated assumptions or tells the board the target is wrong and proposes a defensible alternative with reasoning; notes that a capability arrived at by accident may not survive contact with real compliance requirements and proposes validating that before betting the company on it."
+        }
+      }
+    },
+
+    {
+      "id": "artifact",
+      "order": 4,
+      "title": "The board memo",
+      "time_minutes": 15,
+      "brief": "Write the one-page memo you will send to the board ahead of the meeting. Maximum 400 words.",
+      "tasks": [
+        {
+          "id": "memo",
+          "type": "long_text",
+          "word_limit": 400,
+          "prompt": "The memo."
+        }
+      ],
+      "facilitator_only": {
+        "what_this_tests": ["written_communication"],
+        "scoring_notes": [
+          "Leads with the recommendation, not with the analysis. A board memo that builds to its conclusion in paragraph six has buried it.",
+          "States the diagnosis in one or two sentences. The board does not need the funnel walkthrough.",
+          "Is honest about the $20M target. If the candidate believes it is not reachable, the memo says so plainly. Telling a board what it wants to hear is the failure mode this stage is designed to surface.",
+          "Names the tradeoff being made and what is being deprioritized. A memo with only upside is not a plan.",
+          "Names the leading indicator and the date by which the board should expect to see it move.",
+          "Does not hide the compliance finding's fragility if the candidate identified it."
+        ],
+        "rubric": {
+          "1": "Analysis-first structure with no clear recommendation, or accepts the $20M target uncritically and promises it. No tradeoffs named. Over length.",
+          "2": "Clear enough recommendation and reasonable structure, but soft on the target, vague on tradeoffs, or no measurable checkpoint.",
+          "3": "Recommendation first. Concise diagnosis. Honest treatment of the target. Explicit tradeoff. Named leading indicator with a date.",
+          "4": "All of level 3, and the memo would survive a hostile board member: it pre-empts the obvious challenge, states its own key assumption and what would falsify it, and makes the decision the board actually needs to make clear and easy to act on."
+        }
+      }
+    }
+  ],
+
+  "scoring_summary": {
+    "method": "Each competency scored 1-4 against the anchored levels above. Two independent reviewers score blind, then reconcile any gap of 2 or more levels in conversation.",
+    "bar": "Hire bar for a senior GTM lead: mean 3.0 or above, with no single competency below 2. Market insight below 3 is a hard stop for this role specifically — allocation can be coached, seeing the wedge cannot.",
+    "note": "Coherence between stage 1 and stage 2 is worth more than the quality of either in isolation. A candidate with a mediocre diagnosis whose allocation follows from it rigorously is a better bet than one with a sharp diagnosis and a disconnected plan."
+  }
+}
