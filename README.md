@@ -14,10 +14,17 @@ Scored by humans against anchored rubrics. No automated pass/fail.
 assessments/
   customer-success-csm.json    CSM, mid-level, 45 min
   gtm-lead.json                GTM lead, senior, 50 min
+renderer/
+  index.html                   Playable single-file renderer (CSM assessment)
 docs/
   design-principles.md         Why they're built this way, plus legal constraints
   writing-a-new-assessment.md  How to add a role (~4-6 hours each)
 ```
+
+Open `renderer/index.html` in a browser to take the CSM assessment as a
+candidate would, or flip on **Reviewer view** to see the buried signals, the
+trap options, and the rubric behind each stage. It is a demo of the format —
+responses are not persisted anywhere.
 
 Each assessment is a single JSON file holding both the candidate-facing content
 and the reviewer-facing scoring guidance.

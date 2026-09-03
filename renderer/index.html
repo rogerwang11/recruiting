@@ -1,0 +1,800 @@
+<title>The Renewal at Risk</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ground:    #F1F4F6;
+    --surface:   #FFFFFF;
+    --surface-2: #E9EEF2;
+    --ink:       #16202B;
+    --ink-soft:  #5A6B7B;
+    --ink-faint: #8797A6;
+    --accent:    #1F5C8C;
+    --accent-bg: #E3EDF5;
+    --urgent:    #A8620E;
+    --urgent-bg: #F8ECDC;
+    --rule:      #DBE2E8;
+    --rule-firm: #C3CEd7;
+    --lvl1:      #9E4B3C;
+    --lvl4:      #2C6A52;
+    --shadow:    0 1px 2px rgba(22,32,43,.06), 0 4px 12px rgba(22,32,43,.05);
+
+    --f-display: "Newsreader", Georgia, "Times New Roman", serif;
+    --f-sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:    #0F151B;
+      --surface:   #18212A;
+      --surface-2: #202C37;
+      --ink:       #E4EAEF;
+      --ink-soft:  #97A6B4;
+      --ink-faint: #6D7E8D;
+      --accent:    #6BA8D8;
+      --accent-bg: #1B2E3D;
+      --urgent:    #D9954A;
+      --urgent-bg: #33251485;
+      --rule:      #263442;
+      --rule-firm: #35485A;
+      --lvl1:      #C9705F;
+      --lvl4:      #5D9E82;
+      --shadow:    0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.22);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:    #0F151B;
+    --surface:   #18212A;
+    --surface-2: #202C37;
+    --ink:       #E4EAEF;
+    --ink-soft:  #97A6B4;
+    --ink-faint: #6D7E8D;
+    --accent:    #6BA8D8;
+    --accent-bg: #1B2E3D;
+    --urgent:    #D9954A;
+    --urgent-bg: #33251485;
+    --rule:      #263442;
+    --rule-firm: #35485A;
+    --lvl1:      #C9705F;
+    --lvl4:      #5D9E82;
+    --shadow:    0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.22);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-sans);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 28px 24px 72px; }
+
+  /* ---------- masthead ---------- */
+  .masthead {
+    display: flex; flex-wrap: wrap; gap: 20px;
+    align-items: flex-end; justify-content: space-between;
+    padding-bottom: 18px; border-bottom: 1px solid var(--rule-firm);
+  }
+  .mast-id { display: flex; flex-direction: column; gap: 7px; min-width: 300px; }
+  .eyebrow {
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  h1 {
+    font-family: var(--f-display); font-weight: 500;
+    font-size: clamp(28px, 4vw, 40px); line-height: 1.1;
+    margin: 0; text-wrap: balance; letter-spacing: -.01em;
+  }
+  .mast-meta {
+    display: flex; flex-wrap: wrap; gap: 6px 18px;
+    font-family: var(--f-mono); font-size: 12px; color: var(--ink-soft);
+  }
+  .mast-meta span { white-space: nowrap; }
+
+  /* reviewer toggle */
+  .rv-toggle {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--surface); border: 1px solid var(--rule-firm);
+    border-radius: 7px; padding: 9px 13px; cursor: pointer;
+    font-family: var(--f-sans); font-size: 13px; font-weight: 500;
+    color: var(--ink); transition: border-color .15s, background .15s;
+  }
+  .rv-toggle:hover { border-color: var(--accent); }
+  .rv-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .rv-switch {
+    width: 34px; height: 19px; border-radius: 10px; flex: none;
+    background: var(--rule-firm); position: relative; transition: background .18s;
+  }
+  .rv-switch::after {
+    content: ""; position: absolute; top: 2.5px; left: 2.5px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--surface); transition: transform .18s;
+  }
+  body.reviewing .rv-switch { background: var(--accent); }
+  body.reviewing .rv-switch::after { transform: translateX(15px); }
+  body.reviewing .rv-toggle { border-color: var(--accent); background: var(--accent-bg); }
+
+  /* ---------- stage stepper ---------- */
+  .stepper {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--rule); border: 1px solid var(--rule);
+    border-radius: 9px; overflow: hidden; margin: 22px 0 26px;
+  }
+  .step {
+    background: var(--surface-2); border: 0; cursor: pointer; text-align: left;
+    padding: 13px 15px; display: flex; flex-direction: column; gap: 3px;
+    font-family: var(--f-sans); color: var(--ink-soft);
+    transition: background .15s, color .15s;
+  }
+  .step:hover { background: var(--surface); color: var(--ink); }
+  .step:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .step[aria-current="true"] { background: var(--surface); color: var(--ink); }
+  .step[aria-current="true"] .step-n { color: var(--accent); }
+  .step-n {
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em;
+    color: var(--ink-faint); text-transform: uppercase;
+  }
+  .step-t { font-size: 13.5px; font-weight: 500; line-height: 1.3; }
+
+  /* ---------- working surface ---------- */
+  .surface { display: grid; grid-template-columns: 1.05fr .95fr; gap: 22px; align-items: start; }
+  @media (max-width: 880px) { .surface { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--surface); border: 1px solid var(--rule);
+    border-radius: 10px; box-shadow: var(--shadow);
+  }
+  .panel-hd {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--rule);
+  }
+  .panel-hd h2 {
+    font-family: var(--f-display); font-weight: 500; font-size: 19px;
+    margin: 0; letter-spacing: -.005em;
+  }
+  .clock {
+    font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-faint);
+    white-space: nowrap;
+  }
+  .panel-bd { padding: 16px 18px 20px; }
+
+  .brief {
+    font-family: var(--f-display); font-size: 16.5px; line-height: 1.5;
+    color: var(--ink-soft); margin: 0 0 4px; max-width: 62ch;
+  }
+
+  /* context block */
+  .context { margin-bottom: 22px; }
+  .context p { margin: 0 0 8px; max-width: 64ch; color: var(--ink-soft); }
+  .context p:last-child { margin-bottom: 0; }
+  .context strong { color: var(--ink); font-weight: 600; }
+
+  /* account record — the data list */
+  .rec-title {
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--ink-faint);
+    padding-bottom: 8px; margin-bottom: 2px; border-bottom: 1px solid var(--rule);
+  }
+  .rec { display: flex; flex-direction: column; }
+  .rec-row {
+    display: grid; grid-template-columns: 152px 1fr; gap: 16px;
+    padding: 11px 0; border-bottom: 1px solid var(--rule);
+  }
+  .rec-row:last-child { border-bottom: 0; }
+  @media (max-width: 560px) { .rec-row { grid-template-columns: 1fr; gap: 3px; } }
+  .rec-k {
+    font-family: var(--f-mono); font-size: 11.5px; line-height: 1.5;
+    color: var(--ink-faint); padding-top: 2px;
+  }
+  .rec-v { font-size: 14px; line-height: 1.5; color: var(--ink); }
+
+  /* reviewer annotation on a record row */
+  .flag {
+    display: none; margin-top: 7px; padding: 9px 11px;
+    background: var(--urgent-bg); border-left: 2px solid var(--urgent);
+    border-radius: 0 5px 5px 0; font-size: 12.5px; line-height: 1.5;
+    color: var(--ink);
+  }
+  body.reviewing .flag { display: block; }
+  .flag b {
+    font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--urgent);
+    display: block; margin-bottom: 3px; font-weight: 500;
+  }
+
+  /* ---------- tasks ---------- */
+  .task { margin-bottom: 22px; }
+  .task:last-child { margin-bottom: 0; }
+  .task-q {
+    font-size: 14.5px; font-weight: 500; line-height: 1.45;
+    margin: 0 0 9px; max-width: 58ch;
+  }
+  .lim {
+    font-family: var(--f-mono); font-size: 11px; color: var(--ink-faint);
+    font-weight: 400; letter-spacing: .02em;
+  }
+  textarea, input[type="text"] {
+    width: 100%; font-family: var(--f-sans); font-size: 14px; line-height: 1.5;
+    color: var(--ink); background: var(--ground);
+    border: 1px solid var(--rule-firm); border-radius: 7px;
+    padding: 10px 12px; resize: vertical;
+  }
+  textarea:focus, input[type="text"]:focus {
+    outline: 2px solid var(--accent); outline-offset: -1px;
+    border-color: var(--accent); background: var(--surface);
+  }
+  .rank-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .rank-n {
+    font-family: var(--f-mono); font-size: 12px; color: var(--ink-faint);
+    width: 18px; flex: none; text-align: right;
+  }
+  .wc {
+    font-family: var(--f-mono); font-size: 11px; color: var(--ink-faint);
+    text-align: right; margin-top: 5px;
+  }
+  .wc.over { color: var(--urgent); }
+
+  /* ---------- action menu (stage 2/3) ---------- */
+  .budget {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 14px; margin-bottom: 14px;
+    background: var(--surface-2); border-radius: 8px;
+    border: 1px solid var(--rule);
+  }
+  .budget-fig {
+    font-family: var(--f-mono); font-size: 19px; font-weight: 500;
+    font-variant-numeric: tabular-nums; color: var(--ink); flex: none;
+  }
+  .budget-lab {
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--ink-faint); flex: none;
+  }
+  .meter {
+    display: block; flex: 1; height: 6px; border-radius: 3px;
+    background: var(--rule-firm); overflow: hidden; min-width: 60px;
+  }
+  .ref-note {
+    font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--ink-faint); font-weight: 400;
+  }
+  .meter-fill {
+    display: block; height: 100%; width: 0%; background: var(--accent);
+    transition: width .22s ease, background .22s;
+  }
+  .budget.over .meter-fill { background: var(--urgent); }
+  .budget.over .budget-fig { color: var(--urgent); }
+
+  .acts { display: flex; flex-direction: column; gap: 7px; }
+  .act {
+    display: flex; align-items: center; gap: 11px; width: 100%;
+    padding: 10px 12px; text-align: left; cursor: pointer;
+    background: var(--surface); color: var(--ink);
+    border: 1px solid var(--rule-firm); border-radius: 7px;
+    font-family: var(--f-sans); font-size: 13.5px; line-height: 1.4;
+    transition: border-color .14s, background .14s;
+  }
+  .act:hover { border-color: var(--accent); }
+  .act:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .act[data-on="1"] { border-color: var(--accent); background: var(--accent-bg); }
+  .act-seq {
+    width: 22px; height: 22px; border-radius: 50%; flex: none;
+    display: grid; place-items: center;
+    font-family: var(--f-mono); font-size: 11px; font-weight: 500;
+    background: var(--rule-firm); color: var(--surface);
+  }
+  .act[data-on="1"] .act-seq { background: var(--accent); color: var(--surface); }
+  :root[data-theme="dark"] .act[data-on="1"] .act-seq,
+  .act[data-on="1"] .act-seq { color: var(--surface); }
+  .act-lab { flex: 1; }
+  .act-cost {
+    font-family: var(--f-mono); font-size: 12px; flex: none;
+    color: var(--ink-faint); font-variant-numeric: tabular-nums;
+  }
+  .act[data-on="1"] .act-cost { color: var(--accent); }
+
+  .act-note {
+    display: none; padding: 8px 12px 10px 45px;
+    margin: -4px 0 3px; font-size: 12.5px; line-height: 1.5;
+    color: var(--ink-soft); border-left: 2px solid var(--urgent);
+    background: var(--urgent-bg); border-radius: 0 5px 5px 0;
+  }
+  body.reviewing .act-note { display: block; }
+  .act-note b {
+    font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--urgent); font-weight: 500;
+  }
+
+  /* ---------- reviewer panel ---------- */
+  .rv { display: none; margin-top: 22px; }
+  body.reviewing .rv { display: block; }
+  .rv-panel {
+    background: var(--surface); border: 1px solid var(--accent);
+    border-radius: 10px; box-shadow: var(--shadow); overflow: hidden;
+  }
+  .rv-hd {
+    display: flex; align-items: baseline; justify-content: space-between;
+    flex-wrap: wrap; gap: 10px;
+    padding: 12px 18px; background: var(--accent-bg);
+    border-bottom: 1px solid var(--accent);
+  }
+  .rv-hd h3 {
+    font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--accent); margin: 0; font-weight: 500;
+  }
+  .rv-tests { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .04em;
+    padding: 3px 8px; border-radius: 4px;
+    background: var(--surface); border: 1px solid var(--accent);
+    color: var(--accent);
+  }
+  .rv-bd { padding: 16px 18px 20px; }
+  .rv-note { margin: 0 0 14px; max-width: 68ch; }
+  .rv-note:last-of-type { margin-bottom: 18px; }
+  .rv-note dt {
+    font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: 4px;
+  }
+  .rv-note dd { margin: 0; font-size: 14px; line-height: 1.55; color: var(--ink); }
+
+  /* rubric ladder — level is information, so it's encoded in the rail */
+  .rubric { display: flex; flex-direction: column; gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+  .rung {
+    display: grid; grid-template-columns: 62px 1fr; gap: 14px;
+    background: var(--surface); padding: 12px 15px;
+  }
+  .rung-n { display: flex; align-items: baseline; gap: 6px; }
+  .rung-n i {
+    font-family: var(--f-mono); font-style: normal; font-size: 17px;
+    font-weight: 500; font-variant-numeric: tabular-nums;
+  }
+  .rung-n u {
+    font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .07em;
+    text-transform: uppercase; text-decoration: none; color: var(--ink-faint);
+  }
+  .rung p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); }
+  .rung[data-l="1"] { border-left: 3px solid var(--lvl1); }
+  .rung[data-l="1"] .rung-n i { color: var(--lvl1); }
+  .rung[data-l="2"] { border-left: 3px solid var(--ink-faint); }
+  .rung[data-l="2"] .rung-n i { color: var(--ink-faint); }
+  .rung[data-l="3"] { border-left: 3px solid var(--accent); }
+  .rung[data-l="3"] .rung-n i { color: var(--accent); }
+  .rung[data-l="4"] { border-left: 3px solid var(--lvl4); }
+  .rung[data-l="4"] .rung-n i { color: var(--lvl4); }
+  .rung[data-l="4"] p { color: var(--ink); }
+
+  /* ---------- footer note ---------- */
+  .foot {
+    margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--rule);
+    font-size: 13px; line-height: 1.6; color: var(--ink-soft); max-width: 76ch;
+  }
+  .foot strong { color: var(--ink); font-weight: 600; }
+  .foot code {
+    font-family: var(--f-mono); font-size: 12px;
+    background: var(--surface-2); padding: 1px 5px; border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="mast-id">
+      <div class="eyebrow">Structured scenario assessment</div>
+      <h1>The Renewal at Risk</h1>
+      <div class="mast-meta">
+        <span>Customer Success Manager</span>
+        <span>Mid-level, 3–6 yrs</span>
+        <span>45 min</span>
+        <span>Open book</span>
+      </div>
+    </div>
+    <button class="rv-toggle" id="rvBtn" aria-pressed="false">
+      <span class="rv-switch" aria-hidden="true"></span>
+      <span>Reviewer view</span>
+    </button>
+  </header>
+
+  <nav class="stepper" id="stepper" aria-label="Assessment stages"></nav>
+
+  <div class="surface">
+    <section class="panel" id="leftPanel">
+      <div class="panel-hd">
+        <h2 id="stageTitle"></h2>
+        <span class="clock" id="stageClock"></span>
+      </div>
+      <div class="panel-bd" id="leftBody"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-hd">
+        <h2>Your response</h2>
+        <span class="clock" id="taskCount"></span>
+      </div>
+      <div class="panel-bd" id="rightBody"></div>
+    </section>
+  </div>
+
+  <div class="rv" id="rvPanel"></div>
+
+  <p class="foot">
+    <strong>This is one assessment in a series.</strong> The scenario, tasks and
+    rubric all come from a single <code>customer-success-csm.json</code> file, so
+    the same renderer presents any role in the set. Turn on
+    <strong>Reviewer view</strong> to see what each stage is actually measuring —
+    the buried signals, the trap options, and the anchored 1–4 rubric a human
+    scorer works from. Candidates never see any of it.
+  </p>
+</div>
+
+<script>
+const A = {
+  context: {
+    company: "Meridian",
+    lines: [
+      "<strong>Meridian</strong> — B2B workflow automation software. ~$40M ARR. Sells to mid-market operations teams.",
+      "You are a <strong>Customer Success Manager</strong> at Meridian. You carry 23 accounts.",
+      "You inherited the <strong>Northwind Logistics</strong> account three weeks ago when the previous CSM left the company. You have not yet spoken to anyone there. Today is Monday."
+    ]
+  },
+  stages: [
+    {
+      id: "diagnose",
+      nav: "Diagnose",
+      title: "What is actually going on?",
+      mins: 12,
+      brief: "Below is everything in the account record for Northwind Logistics. Read it, then answer the questions.",
+      records: {
+        title: "Northwind Logistics — account record",
+        rows: [
+          ["Contract value", "$180,000 ARR"],
+          ["Renewal date", "67 days from today"],
+          ["Contract terms", "Auto-renews annually. Either party may decline renewal with 60 days written notice.",
+            { t: "Buried binding constraint", d: "67 − 60 = 7. Northwind's deadline to give notice is one week away, not 67 days. Nothing on this page says so — the candidate has to do the subtraction. This is the single detail that separates levels 2 and 3." }],
+          ["Product usage", "Down 34% quarter over quarter. The decline is concentrated: 2 of their 5 departments stopped logging in entirely in March. The other 3 are flat.",
+            { t: "Loudest signal, wrong problem", d: "This is the number a weak candidate fixes, usually with training or a QBR. It is downstream of the broken WMS integration. Training does not fix an integration." }],
+          ["Support tickets", "14 in the last 90 days. 9 concern the integration with Northwind's warehouse management system (WMS). Most recent WMS ticket is still open, 41 days old.",
+            { t: "Root cause", d: "Integration broke → 2 departments built a manual workaround in March → those departments went dark. Connecting these three facts into one causal chain is the level-3 behavior." }],
+          ["Executive sponsor", "Dana Reyes (VP Operations) championed the original purchase. Left Northwind 6 weeks ago."],
+          ["New executive", "Marcus Chen replaced Dana as VP Operations. The previous CSM emailed him twice. No response to either.",
+            { t: "Constrains the plan", d: "Two unanswered emails means a third is unlikely to work. Candidates who lead with 'email Marcus again' have not registered this." }],
+          ["Satisfaction survey", "Last quarterly survey: 3 responses, average 4/10. Year-ago survey: 11 responses, average 8/10."],
+          ["Most engaged user", "Priya Raghavan, Operations Manager. Logs in daily. Filed 6 of the 14 support tickets. Attended both user webinars this year.",
+            { t: "The only route in", d: "With the sponsor gone and Marcus unresponsive, Priya is the sole available path to the decision-maker. Identifying her as leverage rather than as a happy user is a level-4 marker." }],
+          ["Recent inbound", "Northwind procurement sent a form email last Tuesday: “annual vendor consolidation review — please confirm your account manager contact.”",
+            { t: "Not routine", d: "A consolidation review landing 7 days before a notice deadline is a threat signal wearing a form-letter costume." }]
+        ]
+      },
+      tasks: [
+        { kind: "rank", n: 3, q: "Rank the top 3 risks to this account, most severe first.", lim: "One sentence each" },
+        { kind: "text", rows: 5, q: "What is the single most urgent thing you do in the next 48 hours, and why that rather than anything else?", lim: "75 words", wlim: 75 }
+      ],
+      rv: {
+        tests: ["diagnostic rigor"],
+        notes: [
+          ["What this stage is for", "Nine facts, one of which is binding and invisible. The scoring signal is the gap between what is loud (the usage drop) and what is load-bearing (a 7-day notice deadline caused by an unfixed integration bug and an absent sponsor)."],
+          ["How to read a weak answer", "Weak answers treat the record as a flat list and respond to the largest number on it. Strong answers arrive with a causal chain and a clock."]
+        ],
+        rubric: [
+          "Names the usage drop as the problem. Proposes training, a check-in call, or a QBR. Does not mention the notice deadline. Treats signals as a flat list.",
+          "Identifies either the sponsor vacuum or the notice deadline, but not both. Some separation of symptom from cause, inconsistently applied.",
+          "Identifies the 7-day notice deadline as the binding constraint AND the sponsor vacuum as the root cause of the account going dark. Connects the WMS tickets to the two dormant departments. Reads the procurement email as a threat signal.",
+          "All of level 3, plus: states explicitly what they do not yet know and how they would learn it within hours; identifies Priya as the only available route to Marcus; notes that two unanswered emails mean a third is unlikely to work."
+        ]
+      }
+    },
+
+    {
+      id: "allocate",
+      nav: "Allocate",
+      title: "Where does your week go?",
+      mins: 10,
+      brief: "You have 6 working hours available for this account this week. You have 22 other accounts. Choose what you do and in what order. You do not have to spend all 6 hours.",
+      budget: { hours: 6, label: "of 6h allocated" },
+      actions: [
+        ["Build a usage and ROI deck for Marcus", 3, { t: "Premature artifact", d: "The most common wrong answer. Feels productive, is unfalsifiable, and burns half the week on a guess about what Marcus cares about." }],
+        ["Call Priya to get intel and ask for an introduction", 0.5, { t: "Cheap information", d: "Costs 0.5h and determines whether every other item on this list is the right one. Should come first. Placing it after a major artifact is the level-2 pattern." }],
+        ["Escalate the WMS integration bug to engineering with a written business case", 1, null],
+        ["Email Marcus a third time, different angle", 0.25, { t: "Cheap but hollow", d: "Not wrong to include. Wrong as the primary move — it repeats what already failed twice." }],
+        ["Loop in your AE and your manager to build a save plan", 1, null],
+        ["Fly out for an onsite business review", 8, { t: "Does not fit", d: "8 hours against a 6-hour budget. Selecting it is not a judgment error, it is a reading error — and you want to know." }],
+        ["Audit all 5 departments' usage in detail", 2, null],
+        ["Draft a renewal proposal with a discount", 1.5, { t: "Reflex answer", d: "Discounting before diagnosing. There is no evidence yet that price is the issue — and in stage 3 it turns out a discount could not close the gap anyway." }],
+        ["Ask Priya to forward a note to procurement", 0.25, null]
+      ],
+      tasks: [
+        { kind: "text", rows: 5, q: "Why this order? Name one thing you deliberately chose not to do, and why.", lim: "100 words", wlim: 100 }
+      ],
+      rv: {
+        tests: ["prioritization", "commercial judgment"],
+        notes: [
+          ["The behavior being measured", "Cheap information before expensive artifacts. The 0.5h Priya call determines whether the 3h ROI deck is even the right thing to build. Committing half the budget before making that call is the failure this stage is designed to catch."],
+          ["Strong pattern", "Priya call → internal save plan or WMS escalation → then an artifact chosen based on what Priya said. Budget deliberately left unspent, because the plan is expected to change."],
+          ["Watch for", "Spreading across six or seven items. It reads as thoroughness and functions as an inability to choose."]
+        ],
+        rubric: [
+          "Exceeds the time budget, or leads with the ROI deck or the discount proposal. No stated sequencing logic. Names nothing they declined to do.",
+          "Stays within budget and includes the Priya call, but places it after a major artifact, or treats the list as parallel work rather than a sequence.",
+          "Leads with cheap information gathering. Escalates internally early. Defers the expensive artifact until after the Priya call. Names a specific thing declined and gives a real reason.",
+          "All of level 3, plus: explicitly holds budget in reserve because the plan is expected to change, and states what they would learn that would cause them to spend it differently."
+        ]
+      }
+    },
+
+    {
+      id: "curveball",
+      nav: "Curveball",
+      title: "The call with Priya",
+      mins: 8,
+      brief: "You reach Priya. She is candid, and she likes Meridian. Here is what she tells you. You have 5.5 hours of your week left.",
+      records: {
+        title: "What Priya says",
+        rows: [
+          ["Budget mandate", "Marcus has been told to cut operations vendor spend by 20% this fiscal year. It is his first mandate in the job.",
+            { t: "Category change", d: "This is no longer a satisfaction problem. It is a budget mandate plus an active competitive displacement. A plan that survives this stage unchanged was not a plan." }],
+          ["Competitor", "Flowstate demoed to Marcus two weeks ago and quoted roughly 40% below Meridian's price.",
+            { t: "Kills the discount path", d: "A 40% gap cannot be closed on price. Candidates who respond by discounting have picked the one move that both loses the deal and sets the floor." }],
+          ["Priya's own view", "She thinks Meridian is materially better and says the team would be worse off switching. She has not been asked her opinion and is not in the decision meetings.",
+            { t: "Source exposure", d: "Priya has no political cover. Naming her in a note to Marcus burns the only intelligence source in the account. Strong candidates protect her or ask permission first." }],
+          ["The dormant departments", "They stopped using Meridian in March when the WMS integration broke. They built a manual spreadsheet workaround. It is now their standard process and they are not asking for the integration back.",
+            { t: "Cuts both ways", d: "Either evidence Meridian is not needed (Flowstate's argument) or an unrealized recovery contingent on the WMS fix. Strong candidates see both readings and pick one deliberately." }],
+          ["Marcus's stated priority", "In his first all-hands he said his top goal was to “reduce tool sprawl.” Northwind runs 4 overlapping ops tools including Meridian.",
+            { t: "The opening", d: "The winning frame is not “don't cut Meridian.” It is “consolidate onto Meridian and cut two of the other three,” which delivers Marcus's 20% using his own stated goal — turning a renewal defense into an expansion argument. This is the most discriminating moment in the assessment." }]
+        ]
+      },
+      budget: { hours: 5.5, label: "of 5.5h remaining" },
+      actions: [
+        ["Build a usage and ROI deck for Marcus", 3, null],
+        ["Escalate the WMS integration bug to engineering with a written business case", 1, null],
+        ["Build a consolidation proposal: Meridian absorbs 2 of the other 3 tools", 2.5, { t: "The level-4 move", d: "Not on the original menu. Candidates may propose their own actions here, and whether they invent this one is the clearest single signal in the assessment." }],
+        ["Loop in your AE and your manager to build a save plan", 1, null],
+        ["Draft a renewal proposal with a discount", 1.5, { t: "Now clearly wrong", d: "Selecting this after learning about the 40% gap is a stronger negative signal than selecting it in stage 2." }],
+        ["Win back the 2 dormant departments once WMS is fixed", 2, null],
+        ["Ask Priya for permission to reference her view", 0.25, null]
+      ],
+      tasks: [
+        { kind: "text", rows: 4, q: "Has your read on this account changed? If so, how? If not, say why not.", lim: "100 words", wlim: 100 }
+      ],
+      rv: {
+        tests: ["adaptability", "commercial judgment"],
+        notes: [
+          ["Why stage 3 exists", "A one-shot scenario tests judgment at a single point. Watching someone abandon a plan they committed to ten minutes ago tests something much closer to the actual job. This is the stage most assessments skip and the most predictive one in the set."],
+          ["The distinguishing move", "Arguing the customer's own agenda back to them. Marcus needs 20% out and fewer tools; Meridian can be the tool that survives consolidation rather than the one that gets cut."]
+        ],
+        rubric: [
+          "Does not materially change the plan. Continues with the ROI deck as originally conceived. Or reacts by immediately proposing a discount to close the 40% gap.",
+          "Recognizes the competitive threat and the budget mandate, but responds by defending Meridian's value on its own terms. Plan changes in emphasis, not in kind.",
+          "Reframes around Marcus's consolidation agenda rather than Meridian's value. Recognizes the 40% gap cannot be closed on price and must be reframed on scope. Re-plans concretely. Handles Priya's exposure deliberately.",
+          "All of level 3, plus: converts the renewal defense into a consolidation proposal that makes Meridian the surviving tool; identifies the WMS fix as the precondition for winning the dormant departments back and therefore for the consolidation story being credible; names what would make them forecast the loss honestly instead."
+        ]
+      }
+    },
+
+    {
+      id: "artifact",
+      nav: "Artifact",
+      title: "The email",
+      mins: 15,
+      brief: "Write the actual email to Marcus Chen. He has not responded to two previous emails from Meridian. Maximum 200 words.",
+      tasks: [
+        { kind: "line", q: "Subject line" },
+        { kind: "text", rows: 12, q: "Body", lim: "200 words", wlim: 200 }
+      ],
+      rv: {
+        tests: ["written communication", "commercial judgment"],
+        notes: [
+          ["Why the stage exists", "The only stage that is a work sample rather than a description of work. Someone can reason well about a renewal and still write an email that gets deleted like the two before it."],
+          ["Scoring checklist", "Opens on Marcus's agenda, not Meridian's · renewal not mentioned in the first two sentences · asks for a small specific next step rather than pitching · at least one concrete Northwind detail · Priya not exposed · under 200 words."]
+        ],
+        rubric: [
+          "Leads with the renewal or with Meridian's value. Generic. Over the word limit, or asks for a vague “catch-up.” Or names Priya as the source.",
+          "Reasonable and professional, leads with the customer to some degree, but the ask is soft and the specifics are thin. Reads like a competent template.",
+          "Opens on the cost mandate or the sprawl goal. Concrete Northwind specifics. Clear, small, well-framed ask. Within limit. Priya protected.",
+          "All of level 3, and the email makes Marcus curious rather than defensive — it offers him a way to hit his 20% number that he has not considered, without revealing the whole argument, so that taking the meeting is the cheapest way to find out."
+        ]
+      }
+    }
+  ]
+};
+
+const LVL = ["Below bar", "Approaching", "At bar", "Above bar"];
+let cur = 0;
+const state = {};
+
+const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const hrs = n => (n % 1 === 0 ? n + "h" : n + "h");
+
+/* ---------- stepper ---------- */
+function drawStepper() {
+  document.getElementById("stepper").innerHTML = A.stages.map((s, i) => `
+    <button class="step" data-i="${i}" aria-current="${i === cur}">
+      <span class="step-n">Stage ${i + 1} · ${s.mins} min</span>
+      <span class="step-t">${s.nav}</span>
+    </button>`).join("");
+  document.querySelectorAll(".step").forEach(b =>
+    b.addEventListener("click", () => { cur = +b.dataset.i; render(); }));
+}
+
+/* ---------- left: brief, context, materials ---------- */
+function renderRecord(rec, withFlags, note) {
+  return `<div class="rec-title">${esc(rec.title)}${
+      note ? ` <span class="ref-note">· ${esc(note)}</span>` : ""
+    }</div><div class="rec">` +
+    rec.rows.map(([k, v, flag]) => `
+      <div class="rec-row">
+        <div class="rec-k">${esc(k)}</div>
+        <div class="rec-v">${v}${
+          withFlags && flag ? `<div class="flag"><b>${esc(flag.t)}</b>${flag.d}</div>` : ""
+        }</div>
+      </div>`).join("") + `</div>`;
+}
+
+function drawLeft() {
+  const s = A.stages[cur];
+  const base = A.stages[0].records;          // the account record travels with the candidate
+  document.getElementById("stageTitle").textContent = s.title;
+  document.getElementById("stageClock").textContent = `Stage ${cur + 1} of 4 · ${s.mins} min`;
+
+  let h = `<p class="brief">${s.brief}</p>`;
+  h += `<div class="context" style="margin-top:16px">` +
+    A.context.lines.map(l => `<p>${l}</p>`).join("") + `</div>`;
+
+  // stage-specific new material (stage 3's call notes) sits above the standing record
+  if (s.records && s.records !== base) h += renderRecord(s.records, true) + `<div style="height:24px"></div>`;
+
+  h += renderRecord(base, cur === 0, cur === 0 ? null : "standing reference");
+
+  document.getElementById("leftBody").innerHTML = h;
+}
+
+/* ---------- right: budget menu + tasks ---------- */
+function drawRight() {
+  const s = A.stages[cur];
+  const key = s.id;
+  if (!state[key]) state[key] = { picks: [] };
+
+  let h = "";
+
+  if (s.actions) {
+    h += `<div class="budget" id="budget">
+        <span class="budget-fig" id="budgetFig">0h</span>
+        <span class="budget-lab">${s.budget.label}</span>
+        <span class="meter"><span class="meter-fill" id="meterFill"></span></span>
+      </div><div class="acts">`;
+    s.actions.forEach(([lab, cost, note], i) => {
+      h += `<button class="act" data-i="${i}" data-cost="${cost}" data-on="0">
+          <span class="act-seq" aria-hidden="true">·</span>
+          <span class="act-lab">${esc(lab)}</span>
+          <span class="act-cost">${hrs(cost)}</span>
+        </button>`;
+      if (note) h += `<div class="act-note"><b>${esc(note.t)}</b> — ${note.d}</div>`;
+    });
+    h += `</div>`;
+  }
+
+  if (s.tasks) {
+    h += s.actions ? `<div style="height:22px"></div>` : "";
+    s.tasks.forEach((t, ti) => {
+      h += `<div class="task"><p class="task-q">${esc(t.q)}${t.lim ? ` <span class="lim">${esc(t.lim)}</span>` : ""}</p>`;
+      if (t.kind === "rank") {
+        for (let r = 1; r <= t.n; r++) {
+          h += `<div class="rank-row"><span class="rank-n">${r}.</span>
+            <input type="text" aria-label="Risk ${r}" placeholder="${r === 1 ? "Most severe…" : ""}"></div>`;
+        }
+      } else if (t.kind === "line") {
+        h += `<input type="text" aria-label="${esc(t.q)}" placeholder="Re:…">`;
+      } else {
+        h += `<textarea rows="${t.rows}" data-wlim="${t.wlim || 0}" aria-label="${esc(t.q)}"></textarea>`;
+        if (t.wlim) h += `<div class="wc" data-for="${ti}">0 / ${t.wlim} words</div>`;
+      }
+      h += `</div>`;
+    });
+  }
+
+  document.getElementById("rightBody").innerHTML = h;
+  document.getElementById("taskCount").textContent =
+    s.actions ? "Select and order your actions" : `${s.tasks.length} item${s.tasks.length > 1 ? "s" : ""}`;
+
+  wireActions();
+  wireCounters();
+}
+
+function wireActions() {
+  const s = A.stages[cur];
+  if (!s.actions) return;
+  const picks = state[s.id].picks;
+
+  document.querySelectorAll(".act").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const i = +btn.dataset.i;
+      const at = picks.indexOf(i);
+      if (at === -1) picks.push(i); else picks.splice(at, 1);
+      paintActions();
+    });
+  });
+  paintActions();
+}
+
+function paintActions() {
+  const s = A.stages[cur];
+  const picks = state[s.id].picks;
+  let total = 0;
+
+  document.querySelectorAll(".act").forEach(btn => {
+    const i = +btn.dataset.i;
+    const at = picks.indexOf(i);
+    const on = at !== -1;
+    btn.dataset.on = on ? "1" : "0";
+    btn.querySelector(".act-seq").textContent = on ? (at + 1) : "·";
+    if (on) total += +btn.dataset.cost;
+  });
+
+  const cap = s.budget.hours;
+  const fig = document.getElementById("budgetFig");
+  const fill = document.getElementById("meterFill");
+  const box = document.getElementById("budget");
+  if (!fig) return;
+
+  fig.textContent = (Math.round(total * 100) / 100) + "h";
+  fill.style.width = Math.min(100, (total / cap) * 100) + "%";
+  box.classList.toggle("over", total > cap);
+}
+
+function wireCounters() {
+  document.querySelectorAll("textarea[data-wlim]").forEach((ta, idx) => {
+    const lim = +ta.dataset.wlim;
+    if (!lim) return;
+    const out = ta.parentElement.querySelector(".wc");
+    if (!out) return;
+    ta.addEventListener("input", () => {
+      const n = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0;
+      out.textContent = `${n} / ${lim} words`;
+      out.classList.toggle("over", n > lim);
+    });
+  });
+}
+
+/* ---------- reviewer panel ---------- */
+function drawReviewer() {
+  const s = A.stages[cur];
+  const r = s.rv;
+  document.getElementById("rvPanel").innerHTML = `
+    <div class="rv-panel">
+      <div class="rv-hd">
+        <h3>Reviewer view · Stage ${cur + 1}</h3>
+        <div class="rv-tests">${r.tests.map(t => `<span class="chip">${esc(t)}</span>`).join("")}</div>
+      </div>
+      <div class="rv-bd">
+        ${r.notes.map(([t, d]) => `<dl class="rv-note"><dt>${esc(t)}</dt><dd>${d}</dd></dl>`).join("")}
+        <div class="rubric">
+          ${r.rubric.map((txt, i) => `
+            <div class="rung" data-l="${i + 1}">
+              <div class="rung-n"><i>${i + 1}</i><u>${LVL[i]}</u></div>
+              <p>${txt}</p>
+            </div>`).join("")}
+        </div>
+      </div>
+    </div>`;
+}
+
+function render() {
+  drawStepper();
+  drawLeft();
+  drawRight();
+  drawReviewer();
+}
+
+document.getElementById("rvBtn").addEventListener("click", () => {
+  const on = document.body.classList.toggle("reviewing");
+  document.getElementById("rvBtn").setAttribute("aria-pressed", on);
+});
+
+render();
+</script>
