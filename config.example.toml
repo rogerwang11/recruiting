@@ -1,0 +1,51 @@
+# Copy to config.toml and edit. config.toml is gitignored.
+
+[budget]
+# Hard client-side spend cap. The poller refuses to make a request that could
+# push the current calendar month past this. Set the same number (or lower) as
+# your spending limit in the X developer console so you have two independent
+# brakes.
+monthly_usd = 25.00
+
+# Extra brake: max spend for any single `poll` run. Stops a runaway loop from
+# eating the whole month in one go.
+per_run_usd = 1.00
+
+[search]
+# Posts pulled per request. 10-100. You are billed per post RETURNED, not per
+# request, so a high ceiling costs nothing extra when few posts match.
+max_results = 100
+
+# Max pages to walk per query per run. Each page is a separate billed request.
+max_pages = 2
+
+[[queries]]
+name = "ugc-direct-ask"
+# Brands posting an open call. The -"i am a" / -"my rates" style exclusions do
+# the heavy lifting: they drop creators advertising themselves, who use the
+# exact same nouns as the brands hiring them.
+query = '''
+("looking for UGC" OR "looking for a UGC" OR "need a UGC" OR "need UGC"
+ OR "hiring UGC" OR "seeking UGC" OR "UGC creators wanted" OR "UGC creator wanted")
+-"my rates" -"my portfolio" -"dm me if you need" -"i'm a ugc" -"i am a ugc"
+-is:retweet -is:reply lang:en
+'''
+
+[[queries]]
+name = "ugc-paid-gig"
+query = '''
+("paid UGC" OR "UGC gig" OR "UGC campaign" OR "UGC collab" OR "UGC partnership")
+(hiring OR "looking for" OR "need" OR "apply" OR "open call" OR "reach out")
+-"available for" -"open to work" -"my rates"
+-is:retweet -is:reply lang:en
+'''
+
+[[queries]]
+name = "content-creator-brand-call"
+query = '''
+("content creators" OR "content creator")
+("we're hiring" OR "we are hiring" OR "now hiring" OR "open call" OR "apply here"
+ OR "looking to work with" OR "want to work with")
+(UGC OR "user generated" OR "user-generated" OR brand OR product)
+-is:retweet -is:reply lang:en
+'''
