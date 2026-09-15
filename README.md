@@ -10,20 +10,34 @@ API bills per post returned.
    app to belong to.
 2. Create a **Project**, then an **App** inside it. Search only works for apps
    attached to a project.
-3. Open the app's **Keys and tokens** tab and generate the **Bearer Token**.
-   That single token is all this tool needs — it only reads public posts, so the
-   OAuth 1.0a consumer keys and access tokens are not required.
+3. Open the app's **Keys and tokens** tab. You need **either** credential:
+   - **Bearer Token** — one long string starting with `AAAA`, shown once when
+     generated. Use this if you have it.
+   - **API Key** + **API Key Secret** — a 25-char and a 50-char string, listed
+     higher up the same page and regenerable any time. `xhire` exchanges these
+     for a bearer token itself, so either is fine.
+
+   The **Access Token and Secret** further down are for posting as a user. This
+   tool only reads public posts, so you don't need them.
 4. In **Billing**, add a payment method and buy credits. There is no free tier
    any more; requests fail with 403 until the project has credits.
 
-Copy the token into `.env` at the repo root:
+Copy whichever you have into `.env` at the repo root (`cp .env.example .env`):
 
 ```
 X_BEARER_TOKEN=AAAAAAAAAA...
 ```
 
-`.env` is gitignored. Never commit the token — anyone with it can spend your
-credits.
+or
+
+```
+X_API_KEY=...
+X_API_SECRET=...
+```
+
+`.env` is gitignored. Never commit these — anyone holding them can spend your
+credits. If one leaks, regenerate it on the same console page, which invalidates
+the old one.
 
 ## 2. Configure
 

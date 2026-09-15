@@ -71,23 +71,46 @@ def load_config(path: Path | None = None) -> Config:
 
 
 def bearer_token() -> str:
-    """Read the app-only bearer token, preferring the environment over .env."""
-    token = os.environ.get("X_BEARER_TOKEN")
-    if not token:
-        token = _read_dotenv_token(REPO_ROOT / ".env")
-    if not token:
-        raise ConfigError(
-            "X_BEARER_TOKEN is not set. Put it in .env as X_BEARER_TOKEN=... "
-            "or export it in your shell. See README.md for where to get one."
-        )
-    return token.strip()
+    """Return an app-only bearer token.
+
+    Accepts either credential the developer console hands out: a bearer token
+    directly, or the API Key / Secret pair, which is exchanged for one. The
+    exchange is free, so there is no reason to make the user hunt for the
+    bearer token if they already have the pair.
+    """
+    env = _load_env(REPO_ROOT / ".env")
+
+    token = os.environ.get("X_BEARER_TOKEN") or env.get("X_BEARER_TOKEN")
+    if token:
+        return token.strip()
+
+    api_key = os.environ.get("X_API_KEY") or env.get("X_API_KEY")
+    api_secret = os.environ.get("X_API_SECRET") or env.get("X_API_SECRET")
+    if api_key and api_secret:
+        from .auth import bearer_from_key_pair
+
+        return bearer_from_key_pair(api_key.strip(), api_secret.strip())
+
+    raise ConfigError(
+        "No X credentials found. Put EITHER of these in .env:\n"
+        "  X_BEARER_TOKEN=AAAA...        (one long string, starts with AAAA)\n"
+        "or the API Key / Secret pair from the same console page:\n"
+        "  X_API_KEY=...                 (25 characters)\n"
+        "  X_API_SECRET=...              (50 characters)\n"
+        "See README.md."
+    )
 
 
-def _read_dotenv_token(env_path: Path) -> str | None:
+def _load_env(env_path: Path) -> dict[str, str]:
+    """Parse a .env file into a dict. Blank lines and # comments are skipped."""
     if not env_path.exists():
-        return None
+        return {}
+
+    values: dict[str, str] = {}
     for line in env_path.read_text().splitlines():
         line = line.strip()
-        if line.startswith("X_BEARER_TOKEN="):
-            return line.split("=", 1)[1].strip().strip("\"'")
-    return None
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        values[key.strip()] = value.strip().strip("\"'")
+    return values
